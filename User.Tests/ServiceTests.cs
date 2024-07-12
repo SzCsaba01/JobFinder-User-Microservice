@@ -87,7 +87,7 @@ public class ServiceTests
         var httpClient = new HttpClient(_httpMessageHandlerMock.Object);
         _locationCommunicationService = new LocationCommunicationService(httpClient);
 
-        _pdfService = new PdfService(_serverMock.Object);
+        _pdfService = new PdfService();
 
         _skillService = new SkillService(_skillRepositoryMock.Object);
 
@@ -271,7 +271,7 @@ public class ServiceTests
         formFileMock.Setup(_ => _.Length).Returns(ms.Length);
         formFileMock.Setup(_ => _.ContentType).Returns("application/pdf");
 
-        var pdfService = new PdfService(_serverMock.Object);
+        var pdfService = new PdfService();
 
         await pdfService.SaveUserCVAsync(formFileMock.Object, userProfile);
 
@@ -494,9 +494,17 @@ public class ServiceTests
     public async Task UserService_DeleteUserByUsernameAsync_DeletesUser()
     {
         var username = "testuser";
-        var user = new UserEntity { UserProfile = new UserProfileEntity { Id = Guid.NewGuid() } };
+        var user = new UserEntity
+        {
+            Username = username,
+            UserProfile = new UserProfileEntity
+            {
+                Id = Guid.NewGuid(),
+                Skills = new List<UserProfileSkillMapping> { new UserProfileSkillMapping { SkillName = "Skill1" } }
+            }
+        };
 
-        _userRepositoryMock.Setup(x => x.GetUserByUsernameOrEmailAsync(username)).ReturnsAsync(user);
+        _userRepositoryMock.Setup(x => x.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         await _userService.DeleteUserByUsernameAsync(username);
 

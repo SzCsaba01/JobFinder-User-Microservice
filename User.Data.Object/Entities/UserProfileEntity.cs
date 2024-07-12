@@ -12,12 +12,12 @@ public class UserProfileEntity
     public Guid UserId { get; set; }
 
     [Required(ErrorMessage = "First name is required")]
-    [MaxLength(50, ErrorMessage = "First name cannot be longer than 50 characters")]
+    [MaxLength(100, ErrorMessage = "First name cannot be longer than 100 characters")]
     [MinLength(2, ErrorMessage = "First name cannot be shorter than 2 characters")]
     public string FirstName { get; set; }
 
     [Required(ErrorMessage = "Last name is required")]
-    [MaxLength(50, ErrorMessage = "Last name cannot be longer than 50 characters")]
+    [MaxLength(100, ErrorMessage = "Last name cannot be longer than 100 characters")]
     [MinLength(2, ErrorMessage = "Last name cannot be shorter than 2 characters")]
     public string LastName { get; set; }
 
@@ -30,10 +30,10 @@ public class UserProfileEntity
     [MaxLength(100, ErrorMessage = "City cannot be longer than 100 characters")]
     public string? City { get; set; }
 
-    [MaxLength(500, ErrorMessage = "Education cannot be longer than 500 characters")]
+    [MaxLength(1000, ErrorMessage = "Education cannot be longer than 1000 characters")]
     public string? Education { get; set; }
 
-    [MaxLength(500, ErrorMessage = "Experience cannot be longer than 500 characters")]
+    [MaxLength(1000, ErrorMessage = "Experience cannot be longer than 1000 characters")]
     public string? Experience { get; set; }
 
     public string? UserCV { get; set; }

@@ -1,23 +1,13 @@
-﻿using User.Data.Access.Helpers;
+﻿using Microsoft.AspNetCore.Http;
+using UglyToad.PdfPig;
+using User.Data.Access.Helpers;
 using User.Data.Object.Entities;
 using User.Services.Business.Exceptions;
 using User.Services.Contracts;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.AspNetCore.Http;
-using UglyToad.PdfPig;
-using UglyToad.PdfPig.DocumentLayoutAnalysis.TextExtractor;
 
 namespace User.Services.Business;
 public class PdfService : IPdfService
 {
-    private readonly IServer _server;
-
-    public PdfService(IServer server)
-    {
-        _server = server; 
-    }
-
     public void DeleteUserCV(string username)
     {
         var folderName = Path.Combine(AppConstants.RESOURCES, AppConstants.CV, username);
@@ -65,7 +55,7 @@ public class PdfService : IPdfService
         {
             pathToSave = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, AppConstants.MICROSERVICE_NAME, folderName);
             fullPath = Path.Combine(pathToSave, fileName);
-            var serverAddress = _server.Features.Get<IServerAddressesFeature>().Addresses.First();
+            var serverAddress = AppConstants.MICROSERVICE_URL;
             var dbPath = Path.Combine(serverAddress, folderName, fileName);
             userProfile.UserCV = dbPath;
         }

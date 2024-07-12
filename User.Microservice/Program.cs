@@ -1,15 +1,27 @@
-using User.API.Infrastructure;
-using User.API.Infrastructure.Middleware;
-using User.Data.Access.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Net;
 using System.Text;
+using User.API.Infrastructure;
+using User.API.Infrastructure.Middleware;
+using User.Data.Access.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    var port = Environment.GetEnvironmentVariable("RUNNING_IN_DOCKER") is not null ? 443 : 5278;
+    options.Listen(IPAddress.Any, port, listenOptions =>
+    {
+        var certificatePath = Environment.GetEnvironmentVariable("CERTIFICATE_PATH") ?? builder.Configuration["Certificate:Path"];
+        var certificatePassword = builder.Configuration["Certificate:Password"];
+        listenOptions.UseHttps(certificatePath, certificatePassword);
+    });
+});
 
 var connectionString = Environment.GetEnvironmentVariable("DefaultConnection") ?? builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DataContext>(options => {
@@ -61,6 +73,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 var app = builder.Build();
+
+app.UseHttpsRedirection();
 
 string resourcesPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
 if (!Directory.Exists(resourcesPath))

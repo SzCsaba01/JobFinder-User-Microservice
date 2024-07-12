@@ -67,4 +67,22 @@ public class LocationCommunicationService : ILocationCommunicationService
 
         return JsonSerializer.Deserialize<ICollection<LocationDto>>(await response.Content.ReadAsStringAsync(), jsonSerializerOptions);
     }
+
+    public async Task<ICollection<LocationDto>> GetStatesByCountryAndStateNamesAsync(ICollection<CountryStateCityRegionDto> countryStateCityRegions)
+    {
+        var content = new StringContent(JsonSerializer.Serialize(countryStateCityRegions), Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync(AppConstants.STATE_API_URL + "GetCountryStateCityRegionByNames", content);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception("Error while fetching country state city region by names");
+        }
+
+        var jsonSerializerOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        return JsonSerializer.Deserialize<ICollection<LocationDto>>(await response.Content.ReadAsStringAsync(), jsonSerializerOptions);
+    }
 }

@@ -209,7 +209,23 @@ public class UserProfileDataProcessorService : IUserProfileDataProcessorService
 
         if (!String.IsNullOrEmpty(state))
         {
-            var states = await _locationCommunicationService.GetStatesByNamesAsync(new List<string> { state });
+            if (oldUserProfile.Country is null)
+            {
+                oldUserProfile.State = null;
+                oldUserProfile.City = null;
+                return;
+            }
+
+            var countryStateCityRegions = new List<CountryStateCityRegionDto>
+            {
+                 new CountryStateCityRegionDto
+                {
+                    State = state,
+                    Country = oldUserProfile.Country
+                }
+            };
+
+            var states = await _locationCommunicationService.GetStatesByCountryAndStateNamesAsync(countryStateCityRegions);
             if (states.Any())
             {
                 oldUserProfile.State = states.FirstOrDefault().StateCode;

@@ -64,13 +64,13 @@ namespace User.Data.Access.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Country = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     State = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Education = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    Experience = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Education = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Experience = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     UserCV = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>

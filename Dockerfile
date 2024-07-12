@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app 
-EXPOSE 80
+EXPOSE 443
 
 COPY *.sln .
 COPY User.Microservice/*.csproj ./User.Microservice/
@@ -21,6 +21,8 @@ COPY User.Data.Access/. ./User.Data.Access/
 COPY User.Data.Contracts/. ./User.Data.Contracts/
 COPY User.Data.Object/. ./User.Data.Object/
 
+COPY localhost.pfx /certificate/
+
 WORKDIR /app/User.Microservice
 RUN dotnet build ./User.Microservice.csproj -c Release -o /app/build
 
@@ -31,8 +33,7 @@ RUN dotnet publish ./User.Microservice.csproj -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
 WORKDIR /app 
 
-RUN apt-get update && apt-get install -y iputils-ping && rm -rf /var/lib/apt/lists/*
-
+COPY --from=publish /certificate/localhost.pfx /app/certificate/
 COPY --from=publish /app/publish .
 
 ENTRYPOINT ["dotnet", "User.Microservice.dll"]

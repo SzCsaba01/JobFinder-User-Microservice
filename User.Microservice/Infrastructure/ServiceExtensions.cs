@@ -5,6 +5,7 @@ using User.Services.Business;
 using User.Services.Contracts;
 using Quartz;
 using User.Quartz;
+using System.Net.Security;
 
 namespace User.API.Infrastructure;
 
@@ -32,9 +33,16 @@ public static class ServiceExtensions
 
         services.AddHostedService<QueueMessageReceiverService>();
 
-        string locationMicroserviceURL = Environment.GetEnvironmentVariable("LOCATION_MICROSERVICE_URL") ?? "http://localhost:5204";
+        string locationMicroserviceURL = Environment.GetEnvironmentVariable("LOCATION_MICROSERVICE_URL") ?? "https://localhost:5204";
         services.AddHttpClient<ILocationCommunicationService, LocationCommunicationService>(client => {
             client.BaseAddress = new Uri(locationMicroserviceURL);
+        }).ConfigurePrimaryHttpMessageHandler(serviceProvider =>
+        {
+            var env = serviceProvider.GetService<IWebHostEnvironment>();
+            return new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, certificate, chain, errors) => true,
+            };
         });
 
         services.AddAutoMapper(typeof(Mapper));
@@ -55,7 +63,7 @@ public static class ServiceExtensions
         services.AddCors(options => options.AddPolicy(
             name: "NgOrigins",
             policy => {
-                policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+                policy.WithOrigins("https://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
             }));
 
         return services;

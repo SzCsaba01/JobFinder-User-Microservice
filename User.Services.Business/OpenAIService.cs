@@ -33,9 +33,6 @@ public class OpenAIService : IOpenAIService
                         $"Education: " + "\n{education1} \n{education2} \n{education3}..." +
                         $"Experience: " + "\n{experience1} \n{experience2} \n{experience3}..." +
                         "Every extracted information should be in a new line." +
-                        //"If you can't extract any information, please don't write anything" +
-                        //"Don't write anything other like than the extracted information." +
-                        //"Don't start new line with a space, tab or any other character." + 
                         "The extreacted Country and State should be in ISO2 format." +
                         $"CV Text:\n{text}";
 
