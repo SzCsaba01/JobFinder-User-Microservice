@@ -35,7 +35,7 @@ The system is built using a microservices architecture, ensuring scalability and
 ## Repositories
 
 
-- **Job Microservice:** https://github.com/SzCsaba01/JobFinder-Job-Microservice
-- **User Microservice:** https://github.com/SzCsaba01/JobFinder-User-Microservice
-- **Location Microservice:** https://github.com/SzCsaba01/JobFinder-Location-Microservice
-- **FrontEnd:** https://github.com/SzCsaba01/JobFinder-FrontEnd
+- **[Job-Microservice](https://github.com/SzCsaba01/JobFinder-Job-Microservice)** 
+- **[User-Microservice](https://github.com/SzCsaba01/JobFinder-User-Microservice)** 
+- **[Location-Microservice](https://github.com/SzCsaba01/JobFinder-Location-Microservice)** 
+- **[FrontEnd](https://github.com/SzCsaba01/JobFinder-FrontEnd)** 
